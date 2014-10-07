@@ -452,6 +452,11 @@ Socket.prototype.connect = function (options, cb) {
   }
 
   chrome.sockets.tcp.create(function (createInfo) {
+    if (self.destroyed) {
+      chrome.sockets.tcp.close(createInfo.socketId)
+      return
+    }
+
     self.id = createInfo.socketId
 
     chrome.sockets.tcp.connect(self.id, options.host, port, function (result) {
